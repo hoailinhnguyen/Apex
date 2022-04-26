@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 Route::apiResource('user', UserController::class);
+Route::resource('customers', CustomerController::class);
