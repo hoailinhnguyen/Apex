@@ -7,16 +7,16 @@ use App\Repositories\Customer\CustomerRepository;
 use App\Supports\Traits\HasTransformer;
 use App\Transformers\Customer\CustomerTransformer;
 use App\Transformers\UserTransformer;
+use Flugg\Responder\Http\Responses\SuccessResponseBuilder;
 use Illuminate\Http\JsonResponse;
 
 /**
  * Class
  * @package App\Actions\User
  */
-class ShowListCustomerAction
+class CreateCustomerAction
 {
     use HasTransformer;
-
 
     /**
      * @var CustomerRepository
@@ -31,14 +31,14 @@ class ShowListCustomerAction
         $this->customerRepository = $customerRepository;
     }
 
-
     /**
-     * @return JsonResponse
+     * @param array $data
+     * @return SuccessResponseBuilder|JsonResponse
      */
-    public function __invoke()
+    public function __invoke(array $data): JsonResponse
     {
-        $response = $this->customerRepository->paginate();
+        $response = $this->customerRepository->create($data);
 
-        return $this->httpOK($response, CustomerTransformer::class);
+        return $this->httpCreated($response, CustomerTransformer::class);
     }
 }

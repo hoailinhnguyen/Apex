@@ -2,21 +2,19 @@
 
 namespace App\Actions\Customer;
 
-use App\Models\User;
+
 use App\Repositories\Customer\CustomerRepository;
 use App\Supports\Traits\HasTransformer;
-use App\Transformers\Customer\CustomerTransformer;
-use App\Transformers\UserTransformer;
 use Illuminate\Http\JsonResponse;
+use League\Flysystem\Exception;
 
 /**
  * Class
  * @package App\Actions\User
  */
-class ShowListCustomerAction
+class DeleteCustomerAction
 {
     use HasTransformer;
-
 
     /**
      * @var CustomerRepository
@@ -31,14 +29,18 @@ class ShowListCustomerAction
         $this->customerRepository = $customerRepository;
     }
 
-
     /**
+     * @param $id
      * @return JsonResponse
+     * @throws \Exception
      */
-    public function __invoke()
+    public function __invoke($id): JsonResponse
     {
-        $response = $this->customerRepository->paginate();
-
-        return $this->httpOK($response, CustomerTransformer::class);
+        try {
+            $this->customerRepository->delete($id);
+            return $this->httpNoContent();
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }

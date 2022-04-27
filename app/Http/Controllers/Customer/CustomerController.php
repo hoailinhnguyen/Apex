@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Actions\Customer\CreateCustomerAction;
+use App\Actions\Customer\DeleteCustomerAction;
+use App\Actions\Customer\ShowDetailCustomerAction;
 use App\Actions\Customer\ShowListCustomerAction;
+use App\Actions\Customer\UpdateCustomerAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\CreateCustomerRequest;
+use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Customer;
-use App\Repositories\Customer\CustomerRepository;
+use Exception;
+use Flugg\Responder\Http\Responses\SuccessResponseBuilder;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class CustomerController extends Controller
 {
@@ -27,45 +32,49 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
+     * @param CreateCustomerRequest $request
+     * @param CreateCustomerAction $action
+     * @return JsonResponse|SuccessResponseBuilder
      */
-    public function store(Request $request)
+    public function store(CreateCustomerRequest $request, CreateCustomerAction $action)
     {
-        //
+        return ($action)($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Customer  $customer
-     * @return Response
+     * @param Customer $customer
+     * @param ShowDetailCustomerAction $action
+     * @return JsonResponse
      */
-    public function show(Customer $customer)
+    public function show(Customer $customer, ShowDetailCustomerAction $action): JsonResponse
     {
-        //
+        return ($action)($customer);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
-     * @return Response
+     * @param UpdateCustomerRequest $request
+     * @param Customer $customer
+     * @param UpdateCustomerAction $action
+     * @return JsonResponse|SuccessResponseBuilder
      */
-    public function update(Request $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer, UpdateCustomerAction $action)
     {
-        //
+        return ($action)($request->all(), $customer);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customer  $customer
-     * @return Response
+     * @param Customer $customer
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer, DeleteCustomerAction $action): JsonResponse
     {
-        //
+        return ($action)($customer);
     }
 }
