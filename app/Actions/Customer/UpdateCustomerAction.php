@@ -2,21 +2,18 @@
 
 namespace App\Actions\Customer;
 
-use App\Models\User;
 use App\Repositories\Customer\CustomerRepository;
 use App\Supports\Traits\HasTransformer;
-use App\Transformers\Customer\CustomerTransformer;
 use App\Transformers\UserTransformer;
+use Flugg\Responder\Http\Responses\SuccessResponseBuilder;
 use Illuminate\Http\JsonResponse;
 
 /**
- * Class
  * @package App\Actions\User
  */
-class ShowListCustomerAction
+class UpdateCustomerAction
 {
     use HasTransformer;
-
 
     /**
      * @var CustomerRepository
@@ -31,14 +28,14 @@ class ShowListCustomerAction
         $this->customerRepository = $customerRepository;
     }
 
-
     /**
-     * @return JsonResponse
+     * @param array $data
+     * @param $id
+     * @return SuccessResponseBuilder|JsonResponse
      */
-    public function __invoke()
+    public function __invoke(array $data, $id): JsonResponse
     {
-        $response = $this->customerRepository->paginate();
-
-        return $this->httpOK($response, CustomerTransformer::class);
+        $customer = $this->customerRepository->update($data, $id);
+        return $this->httpOk($customer, UserTransformer::class);
     }
 }
