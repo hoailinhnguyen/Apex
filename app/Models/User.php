@@ -14,10 +14,15 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, HasUuid, OverridesBuilder, HasFactory, SoftDeletes;
-    public function provideCustomBuilder()
+
+    /**
+     * @return string
+     */
+    public function provideCustomBuilder(): string
     {
         return UserBuilder::class;
     }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -71,6 +76,15 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setPasswordAttribute(string $value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
