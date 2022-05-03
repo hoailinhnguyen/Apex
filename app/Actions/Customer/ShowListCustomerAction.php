@@ -22,6 +22,7 @@ class ShowListCustomerAction
      * @var CustomerRepository
      */
     protected CustomerRepository $customerRepository;
+    protected $per_page;
 
     /**
      * @param CustomerRepository $customerRepository
@@ -29,6 +30,8 @@ class ShowListCustomerAction
     public function __construct(CustomerRepository $customerRepository)
     {
         $this->customerRepository = $customerRepository;
+        $this->per_page = request()->has('per_page') ? request()->get('per_page') : null;
+
     }
 
 
@@ -37,7 +40,7 @@ class ShowListCustomerAction
      */
     public function __invoke()
     {
-        $response = $this->customerRepository->paginate();
+        $response = $this->customerRepository->paginate(5);
 
         return $this->httpOK($response, CustomerTransformer::class);
     }

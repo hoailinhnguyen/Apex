@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Customer\CustomerController;
-use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Users\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,5 +23,5 @@ Route::post('login', [AuthController::class, 'login']);
 Route::delete('logout', [AuthController::class, 'logout']);
 Route::get('me', [AuthController::class, 'me']);
 
-Route::apiResource('user', UserController::class);
-Route::resource('customers', CustomerController::class);
+Route::apiResource('users', UsersController::class);
+Route::apiresource('customers', CustomerController::class);

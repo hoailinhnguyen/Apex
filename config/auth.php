@@ -1,5 +1,7 @@
 <?php
 
+use App\Entities\Users\User;
+
 return [
 
     /*
@@ -40,6 +42,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver'   => 'jwt',
+            'provider' => 'users',
+            'hash'     => false,
+        ],
+
         'admin' => [
             'driver'   => 'jwt',
             'provider' => 'users',
@@ -65,15 +73,15 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
+//        'users' => [
+//            'driver' => 'eloquent',
+//            'model' => User::class,
+//        ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+         'users' => [
+             'driver' => 'database',
+             'table' => 'users',
+         ],
     ],
 
     /*

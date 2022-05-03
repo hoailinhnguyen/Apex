@@ -15,7 +15,7 @@ class CustomerTransformer extends TransformerAbstract
     /**
      * Transform the Customer entity.
      *
-     * @param \App\Entities\Customer\Customer $model
+     * @param  Customer  $model
      *
      * @return array
      */

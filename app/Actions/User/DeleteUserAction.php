@@ -3,9 +3,10 @@
 namespace App\Actions\User;
 
 
+use App\Repositories\Users\UserRepository;
 use App\Supports\Traits\HasTransformer;
-use Flugg\Responder\Http\Responses\SuccessResponseBuilder;
 use Illuminate\Http\JsonResponse;
+use League\Flysystem\Exception;
 
 /**
  * Class
@@ -16,12 +17,30 @@ class DeleteUserAction
     use HasTransformer;
 
     /**
-     * @param $user
-     * @return JsonResponse
+     * @var
      */
-    public function __invoke($user): JsonResponse
+    protected UserRepository $userRepository;
+
+    /**
+     * @param UserRepository $userRepository
+     */
+    public function __construct(UserRepository $userRepository)
     {
-        $user->delete();
-        return $this->httpNoContent();
+        $this->userRepository = $userRepository;
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function __invoke($id): JsonResponse
+    {
+        try {
+            $this->userRepository->delete($id);
+            return $this->httpNoContent();
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }

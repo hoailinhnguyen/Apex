@@ -2,8 +2,9 @@
 
 namespace App\Actions\User;
 
+use App\Repositories\Users\UserRepository;
 use App\Supports\Traits\HasTransformer;
-use App\Transformers\UserTransformer;
+use App\Transformers\Users\UserTransformer;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -15,11 +16,25 @@ class ShowDetailUserAction
     use HasTransformer;
 
     /**
-     * @param $user
+     * @var
+     */
+    protected UserRepository $userRepository;
+
+    /**
+     * @param UserRepository $userRepository
+     */
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    /**
+     * @param $id
      * @return JsonResponse
      */
-    public function __invoke($user): JsonResponse
+    public function __invoke($id): JsonResponse
     {
-        return $this->httpOK($user, UserTransformer::class);
+        $customer = $this->userRepository->find($id);
+        return $this->httpOK($customer, UserTransformer::class);
     }
 }

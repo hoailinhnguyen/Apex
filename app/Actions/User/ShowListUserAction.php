@@ -2,10 +2,12 @@
 
 namespace App\Actions\User;
 
-use App\Models\User;
+use App\Repositories\Users\UserRepository;
 use App\Supports\Traits\HasTransformer;
-use App\Transformers\UserTransformer;
+use App\Transformers\Users\UserTransformer;
 use Illuminate\Http\JsonResponse;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class
@@ -15,18 +17,24 @@ class ShowListUserAction
 {
     use HasTransformer;
 
+    protected UserRepository $userRepository;
+
     /**
-     * @param $filter
-     * @param $sort
-     * @param $request
+     * @param  UserRepository  $userRepository
+     */
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+
+    /**
+     * @param $id
      * @return JsonResponse
      */
-    public function __invoke($filter, $sort, $request): JsonResponse
+    public function __invoke()
     {
-        $response = User::query()
-            ->filter($filter)
-            ->sortBy($sort)
-            ->allowPaginate($request);
+        $response = $this->userRepository->paginate();
 
         return $this->httpOK($response, UserTransformer::class);
     }
